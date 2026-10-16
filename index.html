@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>每日日程與待辦清單</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- 頂部標題與今日日期及時間 -->
+    <header class="header">
+      <div class="header-main">
+        <h1 class="main-title">每日日程與待辦事項</h1>
+        <div class="datetime-container">
+          <div class="date-badge">
+            <span class="date-label">今日日期：</span>
+            <span id="current-date" class="date-value">載入中...</span>
+          </div>
+          <div class="time-badge">
+            <span class="time-label">目前時間：</span>
+            <span id="current-time" class="time-value">00:00:00</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content-grid">
+      <!-- 上半部：行程與待辦事項並列擺放 -->
+      <div class="dual-row">
+        <!-- 區塊一：行程清單 -->
+        <section class="card section-schedule">
+          <div class="card-header-flex">
+            <h2 class="section-title">行程清單</h2>
+            <span class="count-badge" id="schedule-count">共 3 項</span>
+          </div>
+          <div class="schedule-list" id="schedule-list">
+            <div class="schedule-item" data-index="1">
+              <span class="item-index">行程 1</span>
+              <div class="item-content-placeholder">未填寫</div>
+              <button type="button" class="del-btn" title="刪除行程" onclick="deleteSchedule(this)">✕</button>
+            </div>
+            <div class="schedule-item" data-index="2">
+              <span class="item-index">行程 2</span>
+              <div class="item-content-placeholder">未填寫</div>
+              <button type="button" class="del-btn" title="刪除行程" onclick="deleteSchedule(this)">✕</button>
+            </div>
+            <div class="schedule-item" data-index="3">
+              <span class="item-index">行程 3</span>
+              <div class="item-content-placeholder">未填寫</div>
+              <button type="button" class="del-btn" title="刪除行程" onclick="deleteSchedule(this)">✕</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 區塊二：待辦事項與狀態 -->
+        <section class="card section-todos">
+          <div class="card-header-flex">
+            <h2 class="section-title">待辦事項與狀態</h2>
+            <span class="count-badge" id="todo-count">共 3 項</span>
+          </div>
+          <div class="todo-list" id="todo-list">
+            <div class="todo-item" data-index="1">
+              <span class="item-index">待辦 1</span>
+              <div class="todo-content-box">
+                <span class="empty-text">未填寫</span>
+                <span class="status-tag status-empty">未設定</span>
+              </div>
+              <button type="button" class="del-btn" title="刪除待辦" onclick="deleteTodo(this)">✕</button>
+            </div>
+            <div class="todo-item" data-index="2">
+              <span class="item-index">待辦 2</span>
+              <div class="todo-content-box">
+                <span class="empty-text">未填寫</span>
+                <span class="status-tag status-empty">未設定</span>
+              </div>
+              <button type="button" class="del-btn" title="刪除待辦" onclick="deleteTodo(this)">✕</button>
+            </div>
+            <div class="todo-item" data-index="3">
+              <span class="item-index">待辦 3</span>
+              <div class="todo-content-box">
+                <span class="empty-text">未填寫</span>
+                <span class="status-tag status-empty">未設定</span>
+              </div>
+              <button type="button" class="del-btn" title="刪除待辦" onclick="deleteTodo(this)">✕</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- 下半部：表單區域並列擺放 -->
+      <div class="dual-row">
+        <!-- 區塊三：新增行程表單 -->
+        <section class="card section-form">
+          <h2 class="section-title">新增行程表單</h2>
+          <form class="app-form" id="schedule-form">
+            <div class="form-group">
+              <label for="event-title">行程名稱</label>
+              <input type="text" id="event-title" placeholder="請輸入行程名稱..." autocomplete="off">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="event-time-hour">行程時間 (24小時制)</label>
+                <div class="time-select-group">
+                  <select id="event-time-hour" aria-label="小時">
+                    <!-- 00 ~ 23 小時由 JS 或預置選項 -->
+                  </select>
+                  <span class="time-colon">:</span>
+                  <select id="event-time-minute" aria-label="分鐘">
+                    <!-- 00 ~ 59 分鐘 -->
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="event-location">地點</label>
+                <input type="text" id="event-location" placeholder="例如：會議室 A 或 線上">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="event-note">備註說明</label>
+              <textarea id="event-note" rows="2" placeholder="請輸入相關備註..."></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">新增行程</button>
+          </form>
+        </section>
+
+        <!-- 區塊四：新增待辦事項表單 -->
+        <section class="card section-form">
+          <h2 class="section-title">新增待辦事項表單</h2>
+          <form class="app-form" id="todo-form">
+            <div class="form-group">
+              <label for="todo-text">待辦事項內容</label>
+              <input type="text" id="todo-text" placeholder="請輸入待辦事項..." autocomplete="off">
+            </div>
+
+            <div class="form-group">
+              <label for="todo-status">狀態</label>
+              <select id="todo-status">
+                <option value="待處理">待處理</option>
+                <option value="進行中">進行中</option>
+                <option value="已完成">已完成</option>
+              </select>
+            </div>
+
+            <button type="submit" class="submit-btn">新增待辦事項</button>
+          </form>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
